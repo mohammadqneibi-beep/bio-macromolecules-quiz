@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Membrane Transport Challenge 🧫</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0a2818,#1a3a2a);color:#e8e8e8;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.ctn{max-width:720px;width:95%;margin:20px auto;padding:20px}
+h1{text-align:center;font-size:1.7rem;margin-bottom:5px;background:linear-gradient(90deg,#00ff88,#00bbff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{text-align:center;color:#7aaa8a;margin-bottom:20px;font-size:.9rem}
+.lt{display:flex;justify-content:center;gap:10px;margin-bottom:20px}
+.lb{background:#1a3a2a;border:2px solid #2a5a3a;color:#7aaa8a;padding:8px 20px;border-radius:20px;cursor:pointer;transition:.3s}
+.lb.on{border-color:#00ff88;color:#00ff88;background:#0d2a1a}
+.pb{background:#1a3a2a;border-radius:10px;height:10px;margin-bottom:12px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,#00ff88,#00bbff);border-radius:10px;transition:width .5s}
+.st{display:flex;justify-content:space-between;margin-bottom:15px;font-size:.85rem;color:#7aaa8a}
+.st span{background:#1a3a2a;padding:5px 12px;border-radius:8px}
+.cd{background:#0f2a1a;border:1px solid #2a5a3a;border-radius:16px;padding:25px;margin-bottom:20px;animation:fi .4s}
+@keyframes fi{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.mol{text-align:center;margin-bottom:15px}
+.mol-name{font-size:1.4rem;font-weight:bold;margin-bottom:5px}
+.mol-desc{color:#7aaa8a;font-size:.9rem;line-height:1.4;padding:10px;background:#0a1f12;border-radius:8px;margin-top:10px}
+.mol-icon{font-size:3rem;margin-bottom:10px}
+.q-label{font-size:.9rem;color:#00ff88;margin-bottom:12px;text-align:center}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.opts{grid-template-columns:1fr}}
+.op{background:#1a3a2a;border:2px solid #2a5a3a;border-radius:12px;padding:14px;cursor:pointer;transition:.3s;text-align:center;font-size:.9rem}
+.op:hover{border-color:#00ff88;background:#1a4a2a}
+.op.ok{border-color:#00ff88;background:#0d3320}
+.op.no{border-color:#ff4444;background:#330d0d}
+.op.off{pointer-events:none;opacity:.6}
+.fb{margin-top:15px;padding:15px;border-radius:10px;line-height:1.5;animation:fi .3s}
+.fb-ok{background:#0d3320;border:1px solid #00ff88}
+.fb-no{background:#330d0d;border:1px solid #ff4444}
+.bt{display:block;width:100%;background:linear-gradient(90deg,#00ff88,#00bbff);border:none;color:#0a2818;padding:14px;border-radius:12px;font-size:1rem;cursor:pointer;margin-top:15px;font-weight:bold}
+.bt:hover{opacity:.9}
+.timer{text-align:center;font-size:1.8rem;font-weight:bold;margin-bottom:15px;font-variant-numeric:tabular-nums}
+.timer.warn{color:#ff4444;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.5}}
+.res{text-align:center}
+.circle{width:130px;height:130px;border-radius:50%;margin:20px auto;display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:bold}
+.c-a{background:linear-gradient(135deg,#00ff88,#00aa55);color:#fff}
+.c-b{background:linear-gradient(135deg,#00bbff,#0077aa);color:#fff}
+.c-c{background:linear-gradient(135deg,#ffa500,#cc6600);color:#fff}
+.c-d{background:linear-gradient(135deg,#888,#555);color:#fff}
+.start{text-align:center;padding:30px 20px}
+.start .ic{font-size:4rem;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="ctn">
+<h1 id="tt">Membrane Transport Challenge</h1>
+<p class="sub" id="sb">Classify molecules by their transport mechanism — beat the clock!</p>
+<div class="lt">
+<button class="lb on" onclick="sl('en')">English</button>
+<button class="lb" onclick="sl('ar')">العربية</button>
+</div>
+<div id="area"></div>
+</div>
+<script>
+let L='en',cur=0,sc=0,dn=false,ans=[],tmr=null,timeLeft=0;
+const T={en:{tt:"Membrane Transport Challenge",sb:"Classify molecules by their transport mechanism — beat the clock!",go:"Start Challenge",nxt:"Next Molecule",fin:"See Results",q:"Molecule",of:"of",sc:"Score",ok:"Correct!",no:"Incorrect!",ag:"Play Again",how:"How does this molecule cross the membrane?",
+tiers:["Transport Master! 🏆","Great knowledge! 🌟","Good effort! 👍","Study more! 📚"],time:"Time"},
+ar:{tt:"تحدي النقل عبر الأغشية",sb:"صنّف الجزيئات حسب آلية نقلها — تغلب على الزمن!",go:"ابدأ التحدي",nxt:"الجزيء التالي",fin:"عرض النتائج",q:"جزيء",of:"من",sc:"النتيجة",ok:"!صحيح",no:"!خطأ",ag:"العب مرة أخرى",how:"كيف يعبر هذا الجزيء الغشاء؟",
+tiers:["خبير النقل! 🏆","معرفة ممتازة! 🌟","جهد جيد! 👍","ادرس أكثر! 📚"],time:"الوقت"}};
+
+const molecules=[
+{name:{en:"Oxygen (O₂)",ar:"الأكسجين (O₂)"},icon:"💨",desc:{en:"Small, nonpolar gas molecule. Essential for cellular respiration.",ar:"جزيء غاز صغير غير قطبي. أساسي للتنفس الخلوي."},answer:0,
+opts:{en:["Simple Diffusion","Facilitated Diffusion","Active Transport","Endocytosis"],ar:["الانتشار البسيط","الانتشار المُسهّل","النقل النشط","الإدخال الخلوي"]},
+exp:{en:"O₂ is small and nonpolar — it passes directly through the phospholipid bilayer down its concentration gradient without any protein channel.",ar:"O₂ صغير وغير قطبي — يمر مباشرة عبر طبقة الفوسفوليبيد المزدوجة حسب تدرج تركيزه بدون أي قناة بروتينية."}},
+
+{name:{en:"Glucose",ar:"الجلوكوز"},icon:"🍬",desc:{en:"Polar sugar molecule. Primary energy source for cells.",ar:"جزيء سكر قطبي. مصدر الطاقة الأساسي للخلايا."},answer:1,
+opts:{en:["Simple Diffusion","Facilitated Diffusion","Active Transport","Exocytosis"],ar:["الانتشار البسيط","الانتشار المُسهّل","النقل النشط","الإخراج الخلوي"]},
+exp:{en:"Glucose is polar and too large to cross the bilayer alone. It uses GLUT transporters (channel proteins) to move down its concentration gradient — no ATP needed.",ar:"الجلوكوز قطبي وكبير جدًا ليعبر الطبقة المزدوجة وحده. يستخدم ناقلات GLUT (بروتينات قنوية) للتحرك حسب تدرج تركيزه — لا يحتاج ATP."}},
+
+{name:{en:"Na⁺/K⁺ ions",ar:"أيونات الصوديوم/البوتاسيوم"},icon:"⚡",desc:{en:"Charged ions. The Na⁺/K⁺ pump maintains membrane potential.",ar:"أيونات مشحونة. مضخة Na⁺/K⁺ تحافظ على جهد الغشاء."},answer:2,
+opts:{en:["Simple Diffusion","Facilitated Diffusion","Active Transport (Na⁺/K⁺ pump)","Osmosis"],ar:["الانتشار البسيط","الانتشار المُسهّل","النقل النشط (مضخة Na⁺/K⁺)","التناضح"]},
+exp:{en:"The Na⁺/K⁺ ATPase pumps 3 Na⁺ out and 2 K⁺ in per ATP hydrolyzed, moving AGAINST concentration gradients. This is primary active transport.",ar:"مضخة Na⁺/K⁺ ATPase تضخ 3 Na⁺ خارجًا و2 K⁺ داخلًا لكل ATP محلل، متحركة ضد تدرج التركيز. هذا هو النقل النشط الأولي."}},
+
+{name:{en:"Water (H₂O)",ar:"الماء (H₂O)"},icon:"💧",desc:{en:"Small polar molecule. Moves across membranes via osmosis.",ar:"جزيء قطبي صغير. يتحرك عبر الأغشية بالتناضح."},answer:1,
+opts:{en:["Simple Diffusion only","Osmosis / Facilitated Diffusion (aquaporins)","Active Transport","Endocytosis"],ar:["الانتشار البسيط فقط","التناضح / الانتشار المُسهّل (الأكوابورينات)","النقل النشط","الإدخال الخلوي"]},
+exp:{en:"Water moves by osmosis — a special case of facilitated diffusion through aquaporin channels. Some water also crosses slowly by simple diffusion.",ar:"الماء يتحرك بالتناضح — حالة خاصة من الانتشار المُسهّل عبر قنوات الأكوابورين. بعض الماء أيضًا يعبر ببطء بالانتشار البسيط."}},
+
+{name:{en:"Cholesterol",ar:"الكوليسترول"},icon:"🟡",desc:{en:"A lipid that regulates membrane fluidity. Fits between phospholipids.",ar:"دهن ينظم سيولة الغشاء. يتناسب بين الفوسفوليبيدات."},answer:0,
+opts:{en:["Simple Diffusion (flip-flop)","Facilitated Diffusion","Active Transport","Vesicular Transport"],ar:["الانتشار البسيط (التقلب)","الانتشار المُسهّل","النقل النشط","النقل الحويصلي"]},
+exp:{en:"Cholesterol is hydrophobic and inserts directly into the lipid bilayer by simple diffusion (flip-flop movement). No protein assistance needed.",ar:"الكوليسترول كاره للماء ويدخل مباشرة في الطبقة الدهنية المزدوجة بالانتشار البسيط (حركة التقلب). لا يحتاج مساعدة بروتينية."}},
+
+{name:{en:"Large protein (e.g., insulin secretion)",ar:"بروتين كبير (مثل إفراز الأنسولين)"},icon:"📦",desc:{en:"Too large for any channel. Must be packaged in vesicles.",ar:"كبير جدًا لأي قناة. يجب تعبئته في حويصلات."},answer:3,
+opts:{en:["Simple Diffusion","Facilitated Diffusion","Active Transport","Exocytosis"],ar:["الانتشار البسيط","الانتشار المُسهّل","النقل النشط","الإخراج الخلوي"]},
+exp:{en:"Insulin is packaged in secretory vesicles by the Golgi. These vesicles fuse with the plasma membrane (exocytosis) to release insulin outside the cell.",ar:"يُعبأ الأنسولين في حويصلات إفرازية بواسطة جولجي. تندمج هذه الحويصلات مع الغشاء البلازمي (الإخراج الخلوي) لإطلاق الأنسولين خارج الخلية."}},
+
+{name:{en:"Bacterium being engulfed by macrophage",ar:"بكتيريا يبتلعها البلعم الكبير"},icon:"🦠",desc:{en:"A white blood cell engulfs a pathogen. Requires membrane reshaping.",ar:"خلية دم بيضاء تبتلع ممرضًا. يتطلب إعادة تشكيل الغشاء."},answer:3,
+opts:{en:["Simple Diffusion","Osmosis","Active Transport","Phagocytosis (Endocytosis)"],ar:["الانتشار البسيط","التناضح","النقل النشط","البلعمة (الإدخال الخلوي)"]},
+exp:{en:"Phagocytosis is a type of endocytosis where the cell extends pseudopods around a particle, forming a phagosome. This requires ATP and cytoskeletal rearrangement.",ar:"البلعمة هي نوع من الإدخال الخلوي حيث تمد الخلية أقدامًا كاذبة حول جسيم، مكونة جسيم بلعمي. يتطلب ATP وإعادة ترتيب الهيكل الخلوي."}},
+
+{name:{en:"CO₂ (Carbon Dioxide)",ar:"ثاني أكسيد الكربون (CO₂)"},icon:"🫧",desc:{en:"Small nonpolar gas. Waste product of cellular respiration.",ar:"غاز صغير غير قطبي. ناتج نفايات التنفس الخلوي."},answer:0,
+opts:{en:["Simple Diffusion","Facilitated Diffusion","Active Transport","Exocytosis"],ar:["الانتشار البسيط","الانتشار المُسهّل","النقل النشط","الإخراج الخلوي"]},
+exp:{en:"Like O₂, CO₂ is small and nonpolar. It freely diffuses across the membrane from high concentration (inside cell) to low concentration (blood).",ar:"مثل O₂، CO₂ صغير وغير قطبي. ينتشر بحرية عبر الغشاء من التركيز العالي (داخل الخلية) إلى التركيز المنخفض (الدم)."}},
+
+{name:{en:"Glucose (intestinal absorption)",ar:"الجلوكوز (الامتصاص المعوي)"},icon:"🍭",desc:{en:"Glucose absorption in the small intestine against its gradient, coupled with Na⁺.",ar:"امتصاص الجلوكوز في الأمعاء الدقيقة ضد تدرجه، مقترنًا بـ Na⁺."},answer:2,
+opts:{en:["Simple Diffusion","Facilitated Diffusion","Secondary Active Transport (SGLT1)","Endocytosis"],ar:["الانتشار البسيط","الانتشار المُسهّل","النقل النشط الثانوي (SGLT1)","الإدخال الخلوي"]},
+exp:{en:"SGLT1 is a symporter that uses the Na⁺ gradient (created by the Na⁺/K⁺ pump) to co-transport glucose AGAINST its gradient. This is secondary active transport.",ar:"SGLT1 هو ناقل مشترك يستخدم تدرج Na⁺ (الذي تخلقه مضخة Na⁺/K⁺) لنقل الجلوكوز المشترك ضد تدرجه. هذا هو النقل النشط الثانوي."}},
+
+{name:{en:"LDL Cholesterol particle",ar:"جسيم كوليسترول LDL"},icon:"🔴",desc:{en:"Large lipoprotein particle carrying cholesterol. Binds to receptors on cell surface.",ar:"جسيم بروتين دهني كبير يحمل الكوليسترول. يرتبط بمستقبلات على سطح الخلية."},answer:3,
+opts:{en:["Simple Diffusion","Facilitated Diffusion","Active Transport","Receptor-Mediated Endocytosis"],ar:["الانتشار البسيط","الانتشار المُسهّل","النقل النشط","الإدخال الخلوي بوساطة المستقبلات"]},
+exp:{en:"LDL binds to LDL receptors in clathrin-coated pits, which invaginate to form coated vesicles. Defective LDL receptors cause familial hypercholesterolemia.",ar:"LDL يرتبط بمستقبلات LDL في حفر مغلفة بالكلاثرين، التي تنثني لتشكل حويصلات مغلفة. خلل مستقبلات LDL يسبب فرط الكوليسترول العائلي."}}
+];
+
+function sl(l){L=l;document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.lb')[l==='en'?0:1].classList.add('on');document.getElementById('tt').textContent=T[L].tt;document.getElementById('sb').textContent=T[L].sb;document.body.dir=l==='ar'?'rtl':'ltr';if(cur===0&&!dn)showSt();else if(cur>=molecules.length)showR();}
+
+function showSt(){document.getElementById('area').innerHTML=`<div class="cd start"><div class="ic">🧫</div><h2>${T[L].tt}</h2><p style="color:#7aaa8a;margin:15px 0;line-height:1.6">${L==='en'?'For each molecule, identify the correct transport mechanism. You have 20 seconds per molecule!':'لكل جزيء، حدد آلية النقل الصحيحة. لديك 20 ثانية لكل جزيء!'}</p><button class="bt" onclick="go()">${T[L].go}</button></div>`;}
+
+function go(){cur=0;sc=0;ans=[];dn=false;showQ();}
+
+function startTimer(){timeLeft=20;updateTimer();tmr=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){clearInterval(tmr);autoAnswer();}},1000);}
+
+function updateTimer(){const el=document.getElementById('tmr');if(el){el.textContent=timeLeft+'s';el.className='timer'+(timeLeft<=5?' warn':'');}}
+
+function autoAnswer(){if(!dn){dn=true;ans.push(false);const m=molecules[cur];document.querySelectorAll('.op').forEach((o,j)=>{o.classList.add('off');if(j===m.answer)o.classList.add('ok');});document.getElementById('fb').innerHTML=`<div class="fb fb-no"><strong>⏰ ${L==='en'?'Time\'s up!':'انتهى الوقت!'}</strong><br>${m.exp[L]}</div><button class="bt" onclick="${cur<molecules.length-1?'nxt()':'showR()'}">${cur<molecules.length-1?T[L].nxt:T[L].fin}</button>`;}}
+
+function showQ(){dn=false;const m=molecules[cur];
+let h=`<div class="pb"><div class="pf" style="width:${(cur/molecules.length)*100}%"></div></div>`;
+h+=`<div class="st"><span>${T[L].q} ${cur+1} ${T[L].of} ${molecules.length}</span><span>${T[L].sc}: ${sc}/${cur}</span></div>`;
+h+=`<div id="tmr" class="timer">20s</div>`;
+h+=`<div class="cd"><div class="mol"><div class="mol-icon">${m.icon}</div><div class="mol-name">${m.name[L]}</div><div class="mol-desc">${m.desc[L]}</div></div>`;
+h+=`<div class="q-label">${T[L].how}</div>`;
+h+=`<div class="opts">${m.opts[L].map((o,i)=>`<div class="op" onclick="chk(${i})">${o}</div>`).join('')}</div><div id="fb"></div></div>`;
+document.getElementById('area').innerHTML=h;startTimer();}
+
+function chk(i){if(dn)return;dn=true;clearInterval(tmr);const m=molecules[cur];const ok=i===m.answer;if(ok)sc++;ans.push(ok);
+document.querySelectorAll('.op').forEach((o,j)=>{o.classList.add('off');if(j===m.answer)o.classList.add('ok');else if(j===i&&!ok)o.classList.add('no');});
+document.getElementById('fb').innerHTML=`<div class="fb ${ok?'fb-ok':'fb-no'}"><strong>${ok?T[L].ok:T[L].no}</strong><br>${m.exp[L]}</div><button class="bt" onclick="${cur<molecules.length-1?'nxt()':'showR()'}">${cur<molecules.length-1?T[L].nxt:T[L].fin}</button>`;}
+
+function nxt(){cur++;showQ();}
+
+function showR(){if(tmr)clearInterval(tmr);const p=Math.round((sc/molecules.length)*100);const t=p>=90?0:p>=70?1:p>=50?2:3;const cc=['c-a','c-b','c-c','c-d'][t];
+let h=`<div class="cd res"><h2>${T[L].tt}</h2><div class="circle ${cc}">${p}%</div><p style="font-size:1.2rem;margin:10px 0">${T[L].tiers[t]}</p><p style="color:#7aaa8a">${sc}/${molecules.length}</p><button class="bt" onclick="go()">${T[L].ag}</button></div>`;
+document.getElementById('area').innerHTML=h;}
+
+showSt();
+</script>
+</body>
+</html>

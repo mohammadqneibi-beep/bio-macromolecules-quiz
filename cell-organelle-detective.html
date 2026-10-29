@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cell Organelle Detective 🔬</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0a1628,#1a2744);color:#e8e8e8;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.container{max-width:700px;width:95%;margin:20px auto;padding:20px}
+h1{text-align:center;font-size:1.8rem;margin-bottom:5px;background:linear-gradient(90deg,#00d4ff,#7b2ff7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{text-align:center;color:#8899aa;margin-bottom:20px;font-size:.9rem}
+.lang-toggle{display:flex;justify-content:center;gap:10px;margin-bottom:20px}
+.lang-btn{background:#1e2d45;border:2px solid #2a3f5f;color:#8899aa;padding:8px 20px;border-radius:20px;cursor:pointer;transition:.3s}
+.lang-btn.active{border-color:#00d4ff;color:#00d4ff;background:#152238}
+.progress-bar{background:#1e2d45;border-radius:10px;height:12px;margin-bottom:15px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#7b2ff7);border-radius:10px;transition:width .5s}
+.stats{display:flex;justify-content:space-between;margin-bottom:20px;font-size:.85rem;color:#8899aa}
+.stats span{background:#1e2d45;padding:5px 12px;border-radius:8px}
+.card{background:#141f35;border:1px solid #2a3f5f;border-radius:16px;padding:25px;margin-bottom:20px;animation:fadeIn .5s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.clue-header{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+.clue-icon{font-size:2rem}
+.clue-label{font-size:.8rem;color:#00d4ff;text-transform:uppercase;letter-spacing:1px}
+.clue-number{font-weight:bold;font-size:1rem}
+.clue-text{font-size:1.1rem;line-height:1.6;margin-bottom:20px;padding:15px;background:#0d1829;border-left:3px solid #7b2ff7;border-radius:0 8px 8px 0}
+.difficulty{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.75rem;font-weight:bold;margin-bottom:10px}
+.diff-easy{background:#0d3320;color:#00ff88}
+.diff-medium{background:#332d0d;color:#ffcc00}
+.diff-hard{background:#330d0d;color:#ff4444}
+.diff-clinical{background:#1a0d33;color:#cc66ff}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.option{background:#1e2d45;border:2px solid #2a3f5f;border-radius:12px;padding:14px;cursor:pointer;transition:.3s;text-align:center;font-size:.95rem}
+.option:hover{border-color:#00d4ff;background:#1a2d50;transform:scale(1.02)}
+.option.correct{border-color:#00ff88;background:#0d3320;animation:pulse .5s}
+.option.wrong{border-color:#ff4444;background:#330d0d}
+.option.disabled{pointer-events:none;opacity:.6}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.feedback{margin-top:15px;padding:15px;border-radius:10px;line-height:1.5;animation:fadeIn .3s}
+.feedback.correct-fb{background:#0d3320;border:1px solid #00ff88}
+.feedback.wrong-fb{background:#330d0d;border:1px solid #ff4444}
+.next-btn{display:block;width:100%;background:linear-gradient(90deg,#00d4ff,#7b2ff7);border:none;color:#fff;padding:14px;border-radius:12px;font-size:1rem;cursor:pointer;margin-top:15px;transition:.3s;font-weight:bold}
+.next-btn:hover{opacity:.9;transform:translateY(-2px)}
+.results{text-align:center}
+.results h2{font-size:1.5rem;margin-bottom:15px}
+.score-circle{width:140px;height:140px;border-radius:50%;margin:20px auto;display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:bold}
+.score-excellent{background:linear-gradient(135deg,#00ff88,#00aa55);color:#fff}
+.score-good{background:linear-gradient(135deg,#00d4ff,#0088cc);color:#fff}
+.score-ok{background:linear-gradient(135deg,#ffcc00,#ff8800);color:#fff}
+.score-poor{background:linear-gradient(135deg,#ff4444,#cc0000);color:#fff}
+.results-detail{margin:20px 0;text-align:left}
+.result-item{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #2a3f5f}
+.result-item .q-text{flex:1;font-size:.9rem}
+.result-item .q-status{font-size:1.2rem;margin-left:10px}
+.start-screen{text-align:center;padding:40px 20px}
+.start-screen p{color:#8899aa;margin:15px 0;line-height:1.6}
+.magnifier{font-size:4rem;margin-bottom:10px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 id="title">Cell Organelle Detective</h1>
+<p class="subtitle" id="subtitle">Can you identify the organelle from the clues?</p>
+
+<div class="lang-toggle">
+<button class="lang-btn active" onclick="setLang('en')">English</button>
+<button class="lang-btn" onclick="setLang('ar')">العربية</button>
+</div>
+
+<div id="game-area"></div>
+</div>
+
+<script>
+let lang='en', current=0, score=0, answered=false, answers=[];
+const T={
+en:{title:"Cell Organelle Detective",subtitle:"Can you identify the organelle from the clues?",start:"Start Investigation",clue:"Clue",next:"Next Clue",finish:"See Results",correct:"Correct!",wrong:"Not quite!",score:"Score",question:"Question",of:"of",difficulty:{easy:"Easy",medium:"Medium",hard:"Hard",clinical:"Clinical"},
+tiers:["Master Detective! 🏆","Great Detective! 🌟","Good work! 👍","Keep practicing! 📚"],restart:"Play Again",
+playAgain:"Try Again"},
+ar:{title:"محقق العضيات الخلوية",subtitle:"هل يمكنك تحديد العضية من الأدلة؟",start:"ابدأ التحقيق",clue:"دليل",next:"الدليل التالي",finish:"عرض النتائج",correct:"!صحيح",wrong:"!ليس تماماً",score:"النتيجة",question:"سؤال",of:"من",difficulty:{easy:"سهل",medium:"متوسط",hard:"صعب",clinical:"سريري"},
+tiers:["محقق خبير! 🏆","محقق ممتاز! 🌟","عمل جيد! 👍","واصل التدريب! 📚"],restart:"العب مرة أخرى",
+playAgain:"حاول مرة أخرى"}
+};
+
+const questions=[
+{clue:{en:"I am the control center of the cell. I contain the cell's genetic blueprint and direct all cellular activities. Without me, the cell cannot make proteins or reproduce.",ar:"أنا مركز التحكم في الخلية. أحتوي على المخطط الجيني للخلية وأوجه جميع الأنشطة الخلوية. بدوني، لا تستطيع الخلية صنع البروتينات أو التكاثر."},answer:"Nucleus",options:{en:["Nucleus","Ribosome","Mitochondria","Golgi Apparatus"],ar:["النواة","الريبوسوم","الميتوكوندريا","جهاز جولجي"]},explanation:{en:"The nucleus houses DNA and controls gene expression. It's surrounded by the nuclear envelope with nuclear pores.",ar:"النواة تحتوي على الحمض النووي وتتحكم في التعبير الجيني. محاطة بالغلاف النووي مع المسام النووية."},diff:"easy",icon:"🧬"},
+
+{clue:{en:"I am the powerhouse! I convert glucose and oxygen into ATP through cellular respiration. Muscle cells have lots of me because they need abundant energy.",ar:"أنا محطة الطاقة! أحول الجلوكوز والأكسجين إلى ATP عبر التنفس الخلوي. الخلايا العضلية لديها الكثير مني لأنها تحتاج طاقة وفيرة."},answer:"Mitochondria",options:{en:["Chloroplast","Mitochondria","Lysosome","Peroxisome"],ar:["البلاستيدات الخضراء","الميتوكوندريا","الليسوسوم","البيروكسيسوم"]},explanation:{en:"Mitochondria have a double membrane with cristae that increase surface area for ATP production via oxidative phosphorylation.",ar:"الميتوكوندريا لها غشاء مزدوج مع طيات (كريستي) تزيد المساحة السطحية لإنتاج ATP عبر الفسفرة التأكسدية."},diff:"easy",icon:"⚡"},
+
+{clue:{en:"I am the cell's recycling center. I contain powerful digestive enzymes at pH 5 that break down worn-out organelles, bacteria, and cellular debris. If I burst, I could destroy the entire cell!",ar:"أنا مركز إعادة التدوير. أحتوي على إنزيمات هاضمة قوية عند pH 5 تحلل العضيات البالية والبكتيريا والحطام الخلوي. إذا انفجرت، يمكنني تدمير الخلية بأكملها!"},answer:"Lysosome",options:{en:["Peroxisome","Vacuole","Lysosome","Endosome"],ar:["البيروكسيسوم","الفجوة","الليسوسوم","الإندوسوم"]},explanation:{en:"Lysosomes contain ~50 hydrolytic enzymes. They perform autophagy (self-eating) to recycle damaged components.",ar:"الليسوسومات تحتوي على ~50 إنزيمًا حلمائيًا. تقوم بالالتهام الذاتي لإعادة تدوير المكونات التالفة."},diff:"medium",icon:"♻️"},
+
+{clue:{en:"I am the cell's postal service. I receive proteins from the ER, modify them by adding sugar tags, sort them, and ship them to their correct destinations in membrane-bound vesicles.",ar:"أنا خدمة البريد الخلوية. أستقبل البروتينات من الشبكة الإندوبلازمية، أعدلها بإضافة علامات سكرية، أرتبها، وأرسلها إلى وجهاتها الصحيحة في حويصلات غشائية."},answer:"Golgi Apparatus",options:{en:["Smooth ER","Golgi Apparatus","Lysosome","Vesicle"],ar:["الشبكة الملساء","جهاز جولجي","الليسوسوم","الحويصلة"]},explanation:{en:"The Golgi has cis (receiving) and trans (shipping) faces. It modifies proteins with glycosylation and phosphorylation.",ar:"جهاز جولجي له وجه استقبال (cis) ووجه شحن (trans). يعدل البروتينات بالغلكزة والفسفرة."},diff:"medium",icon:"📦"},
+
+{clue:{en:"I am a vast network of membranes. My rough variety, studded with ribosomes, makes membrane proteins and secreted proteins. My smooth variety synthesizes lipids and detoxifies drugs.",ar:"أنا شبكة واسعة من الأغشية. نوعي الخشن، المرصع بالريبوسومات، يصنع بروتينات الغشاء والبروتينات المفرزة. نوعي الأملس يصنع الدهون ويزيل سمية الأدوية."},answer:"Endoplasmic Reticulum",options:{en:["Golgi Apparatus","Endoplasmic Reticulum","Cell Membrane","Nuclear Envelope"],ar:["جهاز جولجي","الشبكة الإندوبلازمية","الغشاء الخلوي","الغلاف النووي"]},explanation:{en:"The ER is continuous with the nuclear envelope. Liver cells have extensive smooth ER for drug metabolism.",ar:"الشبكة الإندوبلازمية متصلة بالغلاف النووي. خلايا الكبد لديها شبكة ملساء واسعة لأيض الأدوية."},diff:"medium",icon:"🏭"},
+
+{clue:{en:"I am the cell's internal skeleton. I come in three types: thin microfilaments for movement, thick microtubules for transport highways, and intermediate filaments for structural strength.",ar:"أنا الهيكل الداخلي للخلية. أأتي بثلاثة أنواع: خيوط دقيقة رفيعة للحركة، أنابيب دقيقة سميكة كطرق نقل، وخيوط وسيطة للقوة البنيوية."},answer:"Cytoskeleton",options:{en:["Cytoskeleton","Cell Wall","Extracellular Matrix","Centriole"],ar:["الهيكل الخلوي","الجدار الخلوي","المادة خارج الخلوية","المريكز"]},explanation:{en:"Microfilaments (actin, 7nm), intermediate filaments (8-12nm), and microtubules (tubulin, 25nm) form the dynamic cytoskeleton.",ar:"الخيوط الدقيقة (أكتين، 7 نانومتر)، الخيوط الوسيطة (8-12 نانومتر)، والأنابيب الدقيقة (تيوبيولين، 25 نانومتر) تشكل الهيكل الخلوي الديناميكي."},diff:"hard",icon:"🏗️"},
+
+{clue:{en:"I use hydrogen peroxide (H₂O₂) to detoxify harmful substances like alcohol and formaldehyde. I also break down fatty acids through beta-oxidation. Liver and kidney cells are packed with me.",ar:"أستخدم بيروكسيد الهيدروجين (H₂O₂) لإزالة سمية المواد الضارة مثل الكحول والفورمالدهيد. كما أحلل الأحماض الدهنية عبر أكسدة بيتا. خلايا الكبد والكلى مليئة بي."},answer:"Peroxisome",options:{en:["Lysosome","Peroxisome","Mitochondria","Smooth ER"],ar:["الليسوسوم","البيروكسيسوم","الميتوكوندريا","الشبكة الملساء"]},explanation:{en:"Peroxisomes use oxidase enzymes that produce H₂O₂, then catalase breaks it down to water and oxygen.",ar:"البيروكسيسومات تستخدم إنزيمات أوكسيداز تنتج H₂O₂، ثم الكاتلاز يحللها إلى ماء وأكسجين."},diff:"hard",icon:"🧪"},
+
+{clue:{en:"A patient's cells accumulate undigested lipids in their brain neurons, causing progressive neurodegeneration and death by age 4. The organelle responsible for breaking these down is malfunctioning.",ar:"تتراكم الدهون غير المهضومة في الخلايا العصبية لدماغ المريض، مسببة تنكسًا عصبيًا تدريجيًا والوفاة بعمر 4 سنوات. العضية المسؤولة عن تحليل هذه الدهون معطلة."},answer:"Lysosome",options:{en:["Peroxisome","Golgi Apparatus","Lysosome","Smooth ER"],ar:["البيروكسيسوم","جهاز جولجي","الليسوسوم","الشبكة الملساء"]},explanation:{en:"This describes Tay-Sachs disease — a lysosomal storage disorder where hexosaminidase A enzyme is missing, causing GM2 ganglioside accumulation.",ar:"هذا يصف مرض تاي-ساكس — اضطراب تخزين ليسوسومي حيث يغيب إنزيم هيكسوسامينيداز A، مما يسبب تراكم الغانغليوسيد GM2."},diff:"clinical",icon:"🏥"},
+
+{clue:{en:"A patient has I-cell disease: my proteins never reach me because they lack the mannose-6-phosphate tag that directs them to me. Instead, my enzymes are secreted outside the cell.",ar:"لدى المريض مرض الخلايا I: بروتيناتي لا تصل إليّ أبدًا لأنها تفتقر إلى علامة مانوز-6-فوسفات التي توجهها إليّ. بدلاً من ذلك، تُفرز إنزيماتي خارج الخلية."},answer:"Lysosome",options:{en:["Lysosome","Golgi Apparatus","Endosome","Vacuole"],ar:["الليسوسوم","جهاز جولجي","الإندوسوم","الفجوة"]},explanation:{en:"I-cell disease (mucolipidosis II) results from defective GlcNAc phosphotransferase in the Golgi, preventing M6P tagging and lysosomal enzyme targeting.",ar:"مرض الخلايا I (داء الشحميات المخاطية II) ينتج عن خلل في إنزيم GlcNAc phosphotransferase في جولجي، مما يمنع وسم M6P واستهداف إنزيمات الليسوسوم."},diff:"clinical",icon:"🔬"},
+
+{clue:{en:"I organize the mitotic spindle during cell division. I come in pairs and sit near the nucleus. Without me, chromosomes cannot be properly separated during mitosis.",ar:"أنظم المغزل الانقسامي أثناء انقسام الخلية. أأتي في أزواج وأجلس بالقرب من النواة. بدوني، لا يمكن فصل الكروموسومات بشكل صحيح أثناء الانقسام الفتيلي."},answer:"Centrosome/Centriole",options:{en:["Centrosome/Centriole","Nucleolus","Ribosome","Cytoskeleton"],ar:["المريكز/الجسيم المركزي","النوية","الريبوسوم","الهيكل الخلوي"]},explanation:{en:"Centrosomes contain paired centrioles (9+0 microtubule arrangement) and serve as microtubule organizing centers (MTOCs) during mitosis.",ar:"الجسيمات المركزية تحتوي على مريكزات مزدوجة (ترتيب 9+0 للأنابيب الدقيقة) وتعمل كمراكز تنظيم الأنابيب الدقيقة (MTOCs) أثناء الانقسام."},diff:"hard",icon:"🎯"}
+];
+
+function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.lang-btn')[l==='en'?0:1].classList.add('active');document.getElementById('title').textContent=T[lang].title;document.getElementById('subtitle').textContent=T[lang].subtitle;document.body.dir=l==='ar'?'rtl':'ltr';if(current===0&&!answered)showStart();else if(current>=questions.length)showResults();}
+
+function showStart(){document.getElementById('game-area').innerHTML=`<div class="card start-screen"><div class="magnifier">🔬</div><h2>${T[lang].title}</h2><p>${lang==='en'?'You are a cell biology detective! Read the clues about each organelle and identify it correctly. Questions progress from basic identification to clinical scenarios.':'أنت محقق في بيولوجيا الخلية! اقرأ الأدلة حول كل عضية وحددها بشكل صحيح. الأسئلة تتدرج من التعريف الأساسي إلى السيناريوهات السريرية.'}</p><p>${lang==='en'?'10 clues • 4 difficulty levels • Can you solve them all?':'10 أدلة • 4 مستويات صعوبة • هل يمكنك حلها جميعًا؟'}</p><button class="next-btn" onclick="startGame()">${T[lang].start}</button></div>`;}
+
+function startGame(){current=0;score=0;answers=[];showQuestion();}
+
+function showQuestion(){answered=false;const q=questions[current];const diffClass={easy:'diff-easy',medium:'diff-medium',hard:'diff-hard',clinical:'diff-clinical'}[q.diff];
+let html=`<div class="progress-bar"><div class="progress-fill" style="width:${(current/questions.length)*100}%"></div></div>`;
+html+=`<div class="stats"><span>${T[lang].question} ${current+1} ${T[lang].of} ${questions.length}</span><span>${T[lang].score}: ${score}/${current}</span></div>`;
+html+=`<div class="card"><div class="clue-header"><span class="clue-icon">${q.icon}</span><div><span class="clue-label">${T[lang].clue} #${current+1}</span><br><span class="difficulty ${diffClass}">${T[lang].difficulty[q.diff]}</span></div></div>`;
+html+=`<div class="clue-text">${q.clue[lang]}</div>`;
+html+=`<div class="options">${q.options[lang].map((o,i)=>`<div class="option" onclick="checkAnswer(${i})" id="opt${i}">${o}</div>`).join('')}</div>`;
+html+=`<div id="feedback"></div></div>`;
+document.getElementById('game-area').innerHTML=html;}
+
+function checkAnswer(idx){if(answered)return;answered=true;const q=questions[current];const correctIdx=q.options[lang].indexOf(q.options.en[q.options.en.indexOf(q.answer)]!==-1?q.options[lang][q.options.en.indexOf(q.answer)]:q.options[lang][0]);
+// Find correct index by matching the answer
+let cIdx=0;for(let i=0;i<q.options.en.length;i++){if(q.options.en[i]===q.answer){cIdx=i;break;}}
+const isCorrect=idx===cIdx;if(isCorrect)score++;answers.push({q:current,correct:isCorrect});
+document.querySelectorAll('.option').forEach((o,i)=>{o.classList.add('disabled');if(i===cIdx)o.classList.add('correct');else if(i===idx&&!isCorrect)o.classList.add('wrong');});
+const fb=document.getElementById('feedback');fb.innerHTML=`<div class="feedback ${isCorrect?'correct-fb':'wrong-fb'}"><strong>${isCorrect?T[lang].correct:T[lang].wrong}</strong><br>${q.explanation[lang]}</div><button class="next-btn" onclick="${current<questions.length-1?'nextQ()':'showResults()'}">${current<questions.length-1?T[lang].next:T[lang].finish}</button>`;}
+
+function nextQ(){current++;showQuestion();}
+
+function showResults(){const pct=Math.round((score/questions.length)*100);const tier=pct>=90?0:pct>=70?1:pct>=50?2:3;const scoreClass=['score-excellent','score-good','score-ok','score-poor'][tier];
+let html=`<div class="card results"><h2>${T[lang].title}</h2><div class="score-circle ${scoreClass}">${pct}%</div><p style="font-size:1.3rem;margin:10px 0">${T[lang].tiers[tier]}</p><p style="color:#8899aa">${score}/${questions.length} ${lang==='en'?'correct answers':'إجابات صحيحة'}</p>`;
+html+=`<div class="results-detail">`;answers.forEach((a,i)=>{html+=`<div class="result-item"><span class="q-text">${questions[i].icon} ${questions[i].clue[lang].substring(0,60)}...</span><span class="q-status">${a.correct?'✅':'❌'}</span></div>`;});
+html+=`</div><button class="next-btn" onclick="startGame()">${T[lang].playAgain}</button></div>`;
+document.getElementById('game-area').innerHTML=html;}
+
+showStart();
+</script>
+</body>
+</html>

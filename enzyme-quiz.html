@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enzyme Mastery Quiz 🧪</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#1a0a2e,#2d1b4e);color:#e8e8e8;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.container{max-width:700px;width:95%;margin:20px auto;padding:20px}
+h1{text-align:center;font-size:1.7rem;margin-bottom:5px;background:linear-gradient(90deg,#ff6b6b,#ffd93d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{text-align:center;color:#a88bcc;margin-bottom:20px;font-size:.9rem}
+.lang-toggle{display:flex;justify-content:center;gap:10px;margin-bottom:20px}
+.lang-btn{background:#2d1b4e;border:2px solid #4a2d7a;color:#a88bcc;padding:8px 20px;border-radius:20px;cursor:pointer;transition:.3s}
+.lang-btn.active{border-color:#ff6b6b;color:#ff6b6b;background:#3a1a5e}
+.progress{background:#2d1b4e;border-radius:10px;height:10px;margin-bottom:15px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#ff6b6b,#ffd93d);border-radius:10px;transition:width .5s}
+.info{display:flex;justify-content:space-between;margin-bottom:15px;font-size:.85rem;color:#a88bcc}
+.info span{background:#2d1b4e;padding:5px 12px;border-radius:8px}
+.card{background:#1e0f3a;border:1px solid #4a2d7a;border-radius:16px;padding:25px;margin-bottom:20px;animation:slideIn .4s}
+@keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+.q-text{font-size:1.05rem;line-height:1.6;margin-bottom:20px;padding:15px;background:#150a2e;border-left:3px solid #ffd93d;border-radius:0 8px 8px 0}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{background:#2d1b4e;border:2px solid #4a2d7a;border-radius:12px;padding:14px 18px;cursor:pointer;transition:.3s;font-size:.95rem}
+.opt:hover{border-color:#ff6b6b;background:#3a1a5e}
+.opt.correct{border-color:#00ff88;background:#0d3320}
+.opt.wrong{border-color:#ff4444;background:#330d0d}
+.opt.disabled{pointer-events:none;opacity:.6}
+.fb{margin-top:15px;padding:15px;border-radius:10px;line-height:1.5;animation:slideIn .3s}
+.fb-c{background:#0d3320;border:1px solid #00ff88}
+.fb-w{background:#330d0d;border:1px solid #ff4444}
+.btn{display:block;width:100%;background:linear-gradient(90deg,#ff6b6b,#ffd93d);border:none;color:#1a0a2e;padding:14px;border-radius:12px;font-size:1rem;cursor:pointer;margin-top:15px;font-weight:bold}
+.btn:hover{opacity:.9}
+.result{text-align:center}
+.badge{width:120px;height:120px;border-radius:50%;margin:20px auto;display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:bold}
+.badge-a{background:linear-gradient(135deg,#ffd93d,#ff6b6b);color:#1a0a2e}
+.badge-b{background:linear-gradient(135deg,#00d4ff,#0088cc);color:#fff}
+.badge-c{background:linear-gradient(135deg,#ffa500,#ff6600);color:#fff}
+.badge-d{background:linear-gradient(135deg,#888,#555);color:#fff}
+.start{text-align:center;padding:40px 20px}
+.start .icon{font-size:4rem;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 id="title">Enzyme Mastery Quiz</h1>
+<p class="subtitle" id="sub">Test your knowledge of enzyme mechanisms and real-world applications</p>
+<div class="lang-toggle">
+<button class="lang-btn active" onclick="setL('en')">English</button>
+<button class="lang-btn" onclick="setL('ar')">العربية</button>
+</div>
+<div id="area"></div>
+</div>
+<script>
+let L='en',cur=0,sc=0,done=false,ans=[];
+const tx={en:{title:"Enzyme Mastery Quiz",sub:"Test your knowledge of enzyme mechanisms and real-world applications",go:"Start Quiz",nxt:"Next Question",fin:"See Results",q:"Question",of:"of",sc:"Score",ok:"Correct!",no:"Incorrect!",again:"Try Again",tiers:["Enzyme Expert! 🏆","Great understanding! 🌟","Good effort! 👍","Review enzymes! 📖"]},
+ar:{title:"اختبار إتقان الإنزيمات",sub:"اختبر معرفتك بآليات الإنزيمات وتطبيقاتها الواقعية",go:"ابدأ الاختبار",nxt:"السؤال التالي",fin:"عرض النتائج",q:"سؤال",of:"من",sc:"النتيجة",ok:"!صحيح",no:"!خطأ",again:"حاول مرة أخرى",tiers:["خبير إنزيمات! 🏆","فهم ممتاز! 🌟","جهد جيد! 👍","راجع الإنزيمات! 📖"]}};
+
+const qs=[
+{q:{en:"What is the term for the specific region of an enzyme where the substrate binds?",ar:"ما المصطلح الذي يُطلق على المنطقة المحددة في الإنزيم حيث ترتبط الركيزة؟"},opts:{en:["Allosteric site","Active site","Binding domain","Catalytic subunit"],ar:["الموقع التبادلي","الموقع الفعّال","نطاق الربط","الوحدة الفرعية الحفزية"]},c:1,exp:{en:"The active site is a groove or pocket where substrates bind with high specificity, determined by the enzyme's 3D shape.",ar:"الموقع الفعّال هو أخدود أو جيب حيث ترتبط الركائز بخصوصية عالية، يحددها الشكل ثلاثي الأبعاد للإنزيم."}},
+{q:{en:"When you add vinegar to warm milk to make paneer (cheese), what happens to the milk proteins?",ar:"عند إضافة الخل إلى الحليب الدافئ لصنع الجبن، ماذا يحدث لبروتينات الحليب؟"},opts:{en:["They replicate","They denature and coagulate","They dissolve completely","They become enzymes"],ar:["تتكاثر","تتخثر وتتحلل (تمسخ)","تذوب تمامًا","تصبح إنزيمات"]},c:1,exp:{en:"The acid from vinegar denatures casein proteins (unfolding their 3D structure), causing them to coagulate and form curds — the basis of cheese-making!",ar:"الحمض من الخل يُمسخ بروتينات الكازين (يفكك بنيتها ثلاثية الأبعاد)، مسببًا تخثرها وتكوين الخثارة — أساس صناعة الجبن!"}},
+{q:{en:"Pineapple juice is used as a meat tenderizer. Which enzyme in pineapple breaks down meat proteins?",ar:"يُستخدم عصير الأناناس كمطري للحم. أي إنزيم في الأناناس يحلل بروتينات اللحم؟"},opts:{en:["Amylase","Lipase","Bromelain","Pepsin"],ar:["الأميلاز","الليباز","البروميلين","البيبسين"]},c:2,exp:{en:"Bromelain is a protease enzyme in pineapple that hydrolyzes peptide bonds in meat proteins, making them tender. This is why fresh pineapple can't set in gelatin!",ar:"البروميلين هو إنزيم بروتياز في الأناناس يحلل الروابط الببتيدية في بروتينات اللحم، مما يجعلها طرية. لهذا لا يمكن تثبيت الأناناس الطازج في الجيلاتين!"}},
+{q:{en:"Why do enzymes stop working at very high temperatures (above ~60°C)?",ar:"لماذا تتوقف الإنزيمات عن العمل في درجات الحرارة العالية جدًا (فوق ~60 درجة مئوية)؟"},opts:{en:["They run out of substrate","They become too fast","They denature — lose their 3D shape","They freeze"],ar:["تنفد الركيزة","تصبح سريعة جدًا","تتمسخ — تفقد شكلها ثلاثي الأبعاد","تتجمد"]},c:2,exp:{en:"Heat breaks hydrogen bonds and other weak interactions maintaining the enzyme's tertiary structure, causing denaturation. The active site shape is lost and cannot bind substrate.",ar:"الحرارة تكسر الروابط الهيدروجينية والتفاعلات الضعيفة التي تحافظ على البنية الثلاثية للإنزيم، مسببة التمسخ. يُفقد شكل الموقع الفعّال ولا يمكنه ربط الركيزة."}},
+{q:{en:"When you whisk egg whites to make meringue, you are:",ar:"عند خفق بياض البيض لصنع المارينج (المرنغ)، فإنك:"},opts:{en:["Adding new proteins","Denaturing ovalbumin mechanically","Cooking the proteins","Dissolving the proteins"],ar:["تضيف بروتينات جديدة","تُمسخ الألبومين البيضي ميكانيكيًا","تطبخ البروتينات","تذيب البروتينات"]},c:0,exp:{en:"Whisking mechanically denatures ovalbumin protein, which then unfolds and traps air bubbles in a foam network — creating the stiff peaks of meringue.",ar:"الخفق يُمسخ بروتين الألبومين البيضي ميكانيكيًا، الذي ينفتح ويحبس فقاعات الهواء في شبكة رغوية — مما يخلق قمم المرنغ المتماسكة."}},
+{q:{en:"Competitive inhibitors work by:",ar:"تعمل المثبطات التنافسية عن طريق:"},opts:{en:["Destroying the enzyme permanently","Binding to the active site, competing with substrate","Changing the enzyme's gene","Increasing enzyme activity"],ar:["تدمير الإنزيم نهائيًا","الارتباط بالموقع الفعّال، منافسة الركيزة","تغيير جين الإنزيم","زيادة نشاط الإنزيم"]},c:1,exp:{en:"Competitive inhibitors resemble the substrate and bind reversibly to the active site. Their effect can be overcome by increasing substrate concentration.",ar:"المثبطات التنافسية تشبه الركيزة وترتبط بشكل عكسي بالموقع الفعّال. يمكن التغلب على تأثيرها بزيادة تركيز الركيزة."}},
+{q:{en:"Yeast fermentation in bread-making relies on which enzyme to break down sugars?",ar:"يعتمد التخمر بالخميرة في صناعة الخبز على أي إنزيم لتحليل السكريات؟"},opts:{en:["Zymase","Catalase","Trypsin","DNA polymerase"],ar:["الزيماز","الكاتلاز","التربسين","بوليميراز الحمض النووي"]},c:0,exp:{en:"Zymase is an enzyme complex in yeast that converts glucose to ethanol and CO₂. The CO₂ gas makes bread dough rise!",ar:"الزيماز هو مركب إنزيمي في الخميرة يحول الجلوكوز إلى إيثانول وثاني أكسيد الكربون. غاز CO₂ يجعل عجينة الخبز ترتفع!"}},
+{q:{en:"The drug methotrexate treats cancer by inhibiting dihydrofolate reductase. What type of inhibition is this?",ar:"عقار الميثوتريكسات يعالج السرطان بتثبيط إنزيم اختزال ثنائي هيدروفولات. ما نوع هذا التثبيط؟"},opts:{en:["Allosteric activation","Competitive inhibition","Feedback inhibition","Uncompetitive inhibition"],ar:["التنشيط التبادلي","التثبيط التنافسي","التثبيط الراجع","التثبيط غير التنافسي"]},c:1,exp:{en:"Methotrexate is a structural analog of folic acid that competitively binds to DHFR's active site, blocking DNA synthesis in rapidly dividing cancer cells.",ar:"الميثوتريكسات هو نظير هيكلي لحمض الفوليك يرتبط تنافسيًا بالموقع الفعّال لـ DHFR، مما يمنع تصنيع الحمض النووي في الخلايا السرطانية سريعة الانقسام."}},
+{q:{en:"What is the role of cofactors and coenzymes in enzyme function?",ar:"ما دور العوامل المرافقة والإنزيمات المرافقة في وظيفة الإنزيم؟"},opts:{en:["They destroy the enzyme after use","They are non-protein helpers essential for enzyme activity","They are the products of the reaction","They prevent enzyme activity"],ar:["تدمر الإنزيم بعد الاستخدام","مساعدات غير بروتينية أساسية لنشاط الإنزيم","هي نواتج التفاعل","تمنع نشاط الإنزيم"]},c:1,exp:{en:"Cofactors (metal ions like Zn²⁺, Fe²⁺) and coenzymes (organic molecules like NAD⁺, vitamins) help enzymes catalyze reactions by stabilizing intermediates or transferring groups.",ar:"العوامل المرافقة (أيونات معدنية مثل Zn²⁺, Fe²⁺) والإنزيمات المرافقة (جزيئات عضوية مثل NAD⁺, الفيتامينات) تساعد الإنزيمات في تحفيز التفاعلات بتثبيت الوسائط أو نقل المجموعات."}},
+{q:{en:"Enzymatic browning of a cut apple is caused by which enzyme reacting with oxygen?",ar:"التحول البني الإنزيمي لتفاحة مقطوعة ناتج عن أي إنزيم يتفاعل مع الأكسجين؟"},opts:{en:["Amylase","Polyphenol oxidase","Lactase","Catalase"],ar:["الأميلاز","أوكسيداز البوليفينول","اللاكتاز","الكاتلاز"]},c:1,exp:{en:"Polyphenol oxidase (PPO) catalyzes the oxidation of phenolic compounds to quinones, which polymerize into brown melanin pigments. Lemon juice (acid) inhibits PPO!",ar:"أوكسيداز البوليفينول (PPO) يحفز أكسدة المركبات الفينولية إلى كينونات، التي تتبلمر إلى أصباغ ميلانين بنية. عصير الليمون (الحمض) يثبط PPO!"}}
+];
+
+function setL(l){L=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.lang-btn')[l==='en'?0:1].classList.add('active');document.getElementById('title').textContent=tx[L].title;document.getElementById('sub').textContent=tx[L].sub;document.body.dir=l==='ar'?'rtl':'ltr';if(cur===0&&!done)showS();else if(cur>=qs.length)showR();}
+
+function showS(){document.getElementById('area').innerHTML=`<div class="card start"><div class="icon">🧪</div><h2>${tx[L].title}</h2><p style="color:#a88bcc;margin:15px 0;line-height:1.6">${L==='en'?'10 questions covering enzyme mechanisms, real-world applications in cooking and medicine, and inhibition types.':'10 أسئلة تغطي آليات الإنزيمات وتطبيقاتها الواقعية في الطبخ والطب وأنواع التثبيط.'}</p><button class="btn" onclick="go()">${tx[L].go}</button></div>`;}
+
+function go(){cur=0;sc=0;ans=[];done=false;showQ();}
+
+function showQ(){done=false;const q=qs[cur];
+let h=`<div class="progress"><div class="progress-fill" style="width:${(cur/qs.length)*100}%"></div></div>`;
+h+=`<div class="info"><span>${tx[L].q} ${cur+1} ${tx[L].of} ${qs.length}</span><span>${tx[L].sc}: ${sc}/${cur}</span></div>`;
+h+=`<div class="card"><div class="q-text">${q.q[L]}</div><div class="opts">${q.opts[L].map((o,i)=>`<div class="opt" onclick="chk(${i})" id="o${i}">${o}</div>`).join('')}</div><div id="fb"></div></div>`;
+document.getElementById('area').innerHTML=h;}
+
+function chk(i){if(done)return;done=true;const q=qs[cur];const ok=i===q.c;if(ok)sc++;ans.push(ok);
+document.querySelectorAll('.opt').forEach((o,j)=>{o.classList.add('disabled');if(j===q.c)o.classList.add('correct');else if(j===i&&!ok)o.classList.add('wrong');});
+document.getElementById('fb').innerHTML=`<div class="fb ${ok?'fb-c':'fb-w'}"><strong>${ok?tx[L].ok:tx[L].no}</strong><br>${q.exp[L]}</div><button class="btn" onclick="${cur<qs.length-1?'nxt()':'showR()'}">${cur<qs.length-1?tx[L].nxt:tx[L].fin}</button>`;}
+
+function nxt(){cur++;showQ();}
+
+function showR(){const p=Math.round((sc/qs.length)*100);const t=p>=90?0:p>=70?1:p>=50?2:3;const bc=['badge-a','badge-b','badge-c','badge-d'][t];
+let h=`<div class="card result"><h2>${tx[L].title}</h2><div class="badge ${bc}">${p}%</div><p style="font-size:1.2rem;margin:10px 0">${tx[L].tiers[t]}</p><p style="color:#a88bcc">${sc}/${qs.length}</p><button class="btn" onclick="go()">${tx[L].again}</button></div>`;
+document.getElementById('area').innerHTML=h;}
+
+showS();
+</script>
+</body>
+</html>
