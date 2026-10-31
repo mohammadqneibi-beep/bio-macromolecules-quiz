@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Cell Explorer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#06231f,#0d3b36);color:#e9f6f3;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
+h1{text-align:center;font-size:1.8rem;background:linear-gradient(90deg,#7ef0c5,#7ab8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{text-align:center;color:#a8d8cc;margin:6px 0 16px}
+.layout{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
+@media(max-width:820px){.layout{grid-template-columns:1fr}}
+.panel{background:#0b2f2a;border:1px solid #1f6b5f;border-radius:16px;padding:16px}
+svg{width:100%;height:auto;display:block}
+.org{cursor:pointer;transition:filter .2s,opacity .2s}
+.org:hover{filter:brightness(1.35) drop-shadow(0 0 6px #fff)}
+.org.sel{filter:brightness(1.4) drop-shadow(0 0 8px #ffe066)}
+.org.done{opacity:1}
+h2{color:#7ef0c5;font-size:1.3rem;margin-bottom:4px}
+.ar{direction:rtl;color:#a8d8cc;margin-bottom:10px}
+.row{margin:8px 0;line-height:1.55}
+.row b{color:#ffe066}
+.prog{font-size:.85rem;color:#a8d8cc;margin-bottom:8px}
+.bar{height:8px;background:#06231f;border-radius:6px;overflow:hidden;margin-bottom:12px}.fill{height:100%;background:linear-gradient(90deg,#7ef0c5,#7ab8ff);width:0;transition:width .3s}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.78rem;padding:4px 10px;border-radius:12px;background:#123f39;border:1px solid #1f6b5f;cursor:pointer}
+.chip.v{background:#1f6b5f}
+.qsec{margin-top:18px}
+.q{background:#0b2f2a;border:1px solid #1f6b5f;border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.q p{line-height:1.5}
+.q button{margin-top:8px;background:linear-gradient(90deg,#7ef0c5,#7ab8ff);border:none;color:#06231f;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer}
+.ans{display:none;margin-top:8px;padding:10px;border-radius:8px;background:#123326;border:1px solid #2ecc71;line-height:1.5}
+footer{text-align:center;font-size:.75rem;color:#86b8ac;margin-top:18px}
+</style></head><body><div class="wrap">
+<h1>Interactive Cell Explorer</h1>
+<p class="sub">Click each organelle of this animal cell to discover its structure, function and a clinical link · مستكشف الخلية التفاعلي</p>
+<div class="layout">
+<div class="panel">
+<svg viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg">
+ <ellipse cx="300" cy="230" rx="285" ry="215" fill="#14524a" stroke="#7ef0c5" stroke-width="5" class="org" data-k="membrane"/>
+ <ellipse cx="300" cy="230" rx="270" ry="200" fill="#0f4740"/>
+ <!-- cytoskeleton -->
+ <g class="org" data-k="cytoskeleton" stroke="#9fd6ff" stroke-width="2" opacity=".55" fill="none">
+  <path d="M60 230 Q160 160 250 150"/><path d="M540 230 Q470 330 380 360"/><path d="M120 120 Q200 260 140 360"/><path d="M470 100 Q420 200 520 300"/><path d="M90 300 L210 330"/>
+ </g>
+ <!-- rough ER -->
+ <g class="org" data-k="rer">
+  <path d="M175 165 q30 -40 60 0 q30 40 60 0" fill="none" stroke="#ff9f68" stroke-width="10" stroke-linecap="round"/>
+  <path d="M170 195 q30 -30 60 0 q30 30 60 0" fill="none" stroke="#ff9f68" stroke-width="10" stroke-linecap="round"/>
+  <g fill="#ffe066"><circle cx="190" cy="148" r="3"/><circle cx="215" cy="140" r="3"/><circle cx="250" cy="148" r="3"/><circle cx="275" cy="158" r="3"/><circle cx="200" cy="182" r="3"/><circle cx="245" cy="182" r="3"/><circle cx="280" cy="205" r="3"/></g>
+ </g>
+ <!-- nucleus -->
+ <g class="org" data-k="nucleus"><circle cx="300" cy="225" r="62" fill="#5b4bb7" stroke="#b6a8ff" stroke-width="4"/><circle cx="310" cy="215" r="18" fill="#2f2470"/></g>
+ <!-- smooth ER -->
+ <g class="org" data-k="ser"><path d="M380 150 q15 -25 30 0 t30 0 t30 0" fill="none" stroke="#ffb3c6" stroke-width="9" stroke-linecap="round"/><path d="M385 175 q15 -20 30 0 t30 0 t30 0" fill="none" stroke="#ffb3c6" stroke-width="9" stroke-linecap="round"/></g>
+ <!-- golgi -->
+ <g class="org" data-k="golgi" fill="none" stroke="#ffd166" stroke-width="9" stroke-linecap="round"><path d="M395 245 q35 -18 70 0"/><path d="M398 265 q32 -16 64 0"/><path d="M402 285 q28 -14 56 0"/></g>
+ <!-- mitochondria -->
+ <g class="org" data-k="mito">
+  <ellipse cx="150" cy="300" rx="42" ry="20" fill="#e85d75" stroke="#ffc2cc" stroke-width="3"/><path d="M118 300 q8 -12 16 0 t16 0 t16 0 t16 0" fill="none" stroke="#ffc2cc" stroke-width="2"/>
+  <ellipse cx="420" cy="360" rx="38" ry="18" fill="#e85d75" stroke="#ffc2cc" stroke-width="3"/><path d="M390 360 q7 -11 14 0 t14 0 t14 0 t14 0" fill="none" stroke="#ffc2cc" stroke-width="2"/>
+ </g>
+ <!-- lysosomes -->
+ <g class="org" data-k="lyso" fill="#7ab8ff" stroke="#d6ebff" stroke-width="3"><circle cx="250" cy="350" r="16"/><circle cx="500" cy="200" r="13"/></g>
+ <!-- peroxisome -->
+ <g class="org" data-k="perox"><circle cx="110" cy="200" r="15" fill="#9be15d" stroke="#e1ffc7" stroke-width="3"/><rect x="104" y="194" width="12" height="12" fill="#5c8f2e"/></g>
+ <!-- centrosome -->
+ <g class="org" data-k="centro" fill="#c9a0ff"><rect x="330" y="305" width="26" height="9" rx="3"/><rect x="345" y="296" width="9" height="26" rx="3"/></g>
+ <!-- free ribosomes -->
+ <g class="org" data-k="ribo" fill="#ffe066"><circle cx="200" cy="250" r="4"/><circle cx="215" cy="265" r="4"/><circle cx="330" cy="395" r="4"/><circle cx="345" cy="385" r="4"/><circle cx="480" cy="120" r="4"/></g>
+</svg>
+<div class="chips" id="chips"></div>
+</div>
+<div class="panel" id="info">
+ <div class="prog" id="prog"></div><div class="bar"><div class="fill" id="fill"></div></div>
+ <h2>Start exploring</h2><p class="row">Click any structure in the cell (or a label below the diagram). Visit all 11 structures, then answer the guided discovery questions.</p>
+</div>
+</div>
+<div class="qsec">
+ <h2 style="margin-bottom:10px">Guided discovery questions</h2>
+ <div class="q"><p><b>1.</b> What would happen to a cell if its lysosomes stopped working?</p><button onclick="t(1)">Check model answer</button><div class="ans" id="a1">Worn-out organelles and engulfed material could not be broken down, so undigested molecules would accumulate inside the cell. This is what happens in lysosomal storage diseases such as Tay-Sachs disease (lipid build-up in neurons) and I-cell disease (enzymes are not tagged by the Golgi and never reach lysosomes).</div></div>
+ <div class="q"><p><b>2.</b> Why do muscle cells contain many more mitochondria than most other cells?</p><button onclick="t(2)">Check model answer</button><div class="ans" id="a2">Muscle contraction needs large and continuous amounts of ATP. Mitochondria produce most of the cell’s ATP through aerobic respiration, so cells with high energy demand (skeletal and heart muscle) contain many mitochondria.</div></div>
+ <div class="q"><p><b>3.</b> A pancreatic cell secretes large amounts of the protein insulin. Which organelles would you expect to be especially prominent, and in what order does insulin pass through them?</p><button onclick="t(3)">Check model answer</button><div class="ans" id="a3">Rough ER (synthesis on bound ribosomes and folding) → transport vesicles → Golgi apparatus (modification and packaging) → secretory vesicles → plasma membrane (exocytosis). Rough ER and Golgi are therefore abundant.</div></div>
+ <div class="q"><p><b>4.</b> Liver cells of a person who regularly drinks alcohol show a large increase in one organelle. Which one, and why?</p><button onclick="t(4)">Check model answer</button><div class="ans" id="a4">Smooth ER — it contains detoxifying enzymes (e.g., cytochrome P450). Repeated exposure to alcohol and drugs causes proliferation of smooth ER, which also increases tolerance to some medicines.</div></div>
+</div>
+<footer>AI-generated teaching resource (drafted with an AI assistant, reviewed by the instructor) · General Biology for Health Sciences · Open access, no login required</footer>
+</div>
+<script>
+const D={
+membrane:['Plasma membrane','الغشاء البلازمي','Phospholipid bilayer with embedded proteins, cholesterol and carbohydrates (fluid mosaic model).','Controls what enters and leaves the cell (selective permeability), cell signalling and cell recognition.','Faulty membrane channel proteins cause disease, e.g., CFTR chloride channel in cystic fibrosis.'],
+nucleus:['Nucleus','النواة','Double-membrane nuclear envelope with pores; contains chromatin (DNA + proteins) and a nucleolus.','Stores genetic information and controls the cell by directing protein synthesis; the nucleolus makes ribosomal RNA.','Mutations in nuclear DNA that disrupt cell-cycle control can lead to cancer.'],
+rer:['Rough endoplasmic reticulum','الشبكة الإندوبلازمية الخشنة','Flattened membrane sacs studded with ribosomes, continuous with the nuclear envelope.','Synthesises and folds secretory and membrane proteins, then sends them to the Golgi in vesicles.','Very abundant in antibody-secreting plasma cells and insulin-secreting pancreatic cells.'],
+ser:['Smooth endoplasmic reticulum','الشبكة الإندوبلازمية الملساء','Tubular membranes without ribosomes.','Synthesises lipids and steroid hormones, detoxifies drugs and alcohol (liver), stores Ca²⁺ (muscle).','Repeated drug or alcohol use increases smooth ER in liver cells, raising drug tolerance.'],
+golgi:['Golgi apparatus','جهاز غولجي','Stacks of flattened membrane sacs (cisternae) with a receiving (cis) and shipping (trans) face.','Modifies, sorts and packages proteins and lipids; tags lysosomal enzymes with mannose-6-phosphate.','I-cell disease: the Golgi fails to tag lysosomal enzymes, so they are secreted instead of reaching lysosomes.'],
+mito:['Mitochondrion','الميتوكوندريا','Double membrane; the inner membrane is folded into cristae; contains its own DNA and ribosomes.','Site of aerobic respiration — produces most of the cell’s ATP.','Cyanide blocks the electron transport chain in mitochondria, stopping ATP production.'],
+lyso:['Lysosome','الجسيم الحال','Membrane sac containing hydrolytic enzymes that work best at acidic pH (≈ 5).','Digests food particles, worn-out organelles (autophagy) and engulfed bacteria.','Tay-Sachs disease: a missing lysosomal enzyme causes lipid build-up in nerve cells.'],
+perox:['Peroxisome','الجسيم التأكسدي (البيروكسيسوم)','Single-membrane compartment containing oxidative enzymes and catalase.','Breaks down fatty acids and toxins; produces H₂O₂ and converts it to water with catalase.','Peroxisomal disorders (e.g., adrenoleukodystrophy) cause very-long-chain fatty acids to accumulate.'],
+centro:['Centrosome (centrioles)','الجسيم المركزي','Region near the nucleus containing a pair of centrioles made of microtubule triplets.','Organises microtubules and the mitotic spindle during cell division.','Many anticancer drugs (e.g., taxanes, vinca alkaloids) target spindle microtubules.'],
+ribo:['Free ribosomes','الرايبوسومات الحرة','Complexes of rRNA and protein; not membrane-bound; 80S in eukaryotic cytosol.','Make proteins that function in the cytosol (e.g., glycolytic enzymes).','Some antibiotics (e.g., tetracyclines) block bacterial 70S ribosomes but not human 80S ribosomes.'],
+cytoskeleton:['Cytoskeleton','الهيكل الخلوي','Network of microtubules, actin microfilaments and intermediate filaments.','Maintains shape, anchors organelles, moves vesicles and enables cell movement and division.','Defects in cilia (microtubule-based) cause primary ciliary dyskinesia with chronic respiratory infections.']};
+const seen=new Set();let cur=null;
+const chips=document.getElementById('chips');
+Object.keys(D).forEach(k=>{const c=document.createElement('span');c.className='chip';c.textContent=D[k][0];c.id='c_'+k;c.onclick=()=>pick(k);chips.appendChild(c)});
+document.querySelectorAll('.org').forEach(o=>o.addEventListener('click',e=>{e.stopPropagation();pick(o.dataset.k)}));
+function pick(k){seen.add(k);cur=k;document.querySelectorAll('.org').forEach(o=>o.classList.toggle('sel',o.dataset.k===k));
+document.getElementById('c_'+k).classList.add('v');const d=D[k];
+document.getElementById('info').innerHTML=`<div class="prog" id="prog"></div><div class="bar"><div class="fill" id="fill"></div></div><h2>${d[0]}</h2><p class="ar">${d[1]}</p><p class="row"><b>Structure:</b> ${d[2]}</p><p class="row"><b>Function:</b> ${d[3]}</p><p class="row"><b>Clinical link:</b> ${d[4]}</p>`;upd()}
+function upd(){const n=Object.keys(D).length;document.getElementById('prog').textContent=`Explored ${seen.size} of ${n} structures`+(seen.size===n?' — now answer the questions below!':'');document.getElementById('fill').style.width=(seen.size/n*100)+'%'}
+function t(i){const e=document.getElementById('a'+i);e.style.display=e.style.display==='block'?'none':'block'}
+upd();
+</script></body></html>

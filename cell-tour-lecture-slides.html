@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Tour of the Cell — Lecture Slides</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0b1d33,#16324f);color:#eef3f8;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{width:100%;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:#9fc3e6}
+.deck{max-width:900px;width:94%;flex:1;display:flex;align-items:center}
+.slide{display:none;width:100%;background:#102a45;border:1px solid #2c5582;border-radius:18px;padding:34px 38px;min-height:420px;animation:fade .35s}
+.slide.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-size:2rem;margin-bottom:10px;background:linear-gradient(90deg,#5ee7df,#b490ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:1.45rem;color:#5ee7df;margin-bottom:16px}
+.ar{direction:rtl;color:#b9cbe0;font-size:1rem;margin-bottom:14px}
+ul{margin-left:22px;line-height:1.7;font-size:1.05rem}
+li{margin-bottom:6px}
+.box{margin-top:16px;padding:14px 16px;border-radius:10px;background:#0b2036;border-left:4px solid #ffd166;line-height:1.55}
+.box b{color:#ffd166}
+.q{border-left-color:#ef476f}.q b{color:#ef476f}
+table{border-collapse:collapse;width:100%;margin-top:6px}
+th,td{border:1px solid #2c5582;padding:8px 10px;text-align:left;font-size:.95rem}
+th{background:#173b61;color:#5ee7df}
+nav{display:flex;gap:12px;align-items:center;margin:18px 0 26px}
+button{background:#1d4a77;border:1px solid #3a76b0;color:#fff;padding:10px 20px;border-radius:10px;cursor:pointer;font-size:.95rem}
+button:hover{background:#2a5f96}
+.counter{color:#9fc3e6;min-width:70px;text-align:center}
+.bar{width:100%;height:5px;background:#0b1d33}.fill{height:100%;background:linear-gradient(90deg,#5ee7df,#b490ca);transition:width .3s}
+footer{font-size:.75rem;color:#7d9cbc;padding-bottom:14px;text-align:center}
+</style></head><body>
+<div class="bar"><div class="fill" id="fill"></div></div>
+<header><span>General Biology for Health Sciences</span><span>Cell Tour · Lecture</span></header>
+<main class="deck"><section class="slide"><h1>A Tour of the Cell</h1><p class="ar">جولة داخل الخلية</p><ul><li>How we study cells: microscopy and cell fractionation</li><li>Prokaryotic vs eukaryotic cells</li><li>The nucleus and ribosomes</li><li>The endomembrane system</li><li>Mitochondria, chloroplasts and peroxisomes</li><li>The cytoskeleton and cell junctions</li></ul></section>
+<section class="slide"><h2>How we study cells</h2><p class="ar">طرق دراسة الخلايا</p><table><tr><th>Tool</th><th>What it shows</th></tr><tr><td>Light microscope</td><td>Living cells, resolution ≈ 0.2 µm</td></tr><tr><td>Scanning EM (SEM)</td><td>3-D surface detail</td></tr><tr><td>Transmission EM (TEM)</td><td>Internal ultrastructure (organelles, membranes)</td></tr><tr><td>Cell fractionation</td><td>Separates organelles by centrifugation so their functions can be studied</td></tr></table></section>
+<section class="slide"><h2>Prokaryotic vs eukaryotic</h2><p class="ar">بدائيات النوى وحقيقيات النوى</p><table><tr><th></th><th>Prokaryotic</th><th>Eukaryotic</th></tr><tr><td>DNA</td><td>Nucleoid, no membrane</td><td>Inside a nucleus</td></tr><tr><td>Organelles</td><td>No membrane-bound organelles</td><td>Many membrane-bound organelles</td></tr><tr><td>Size</td><td>≈ 1–5 µm</td><td>≈ 10–100 µm</td></tr><tr><td>Ribosomes</td><td>70S</td><td>80S (cytosol)</td></tr><tr><td>Examples</td><td>Bacteria, archaea</td><td>Animals, plants, fungi, protists</td></tr></table><div class="box"><b>Clinical link:</b> some antibiotics target 70S ribosomes, sparing human 80S ribosomes.</div></section>
+<section class="slide"><h2>Nucleus &amp; ribosomes</h2><ul><li><b>Nucleus</b>: double-membrane envelope with pores; contains chromatin and the nucleolus (rRNA synthesis).</li><li><b>Ribosomes</b>: make proteins; free ribosomes → cytosolic proteins; bound ribosomes (on rough ER) → secreted and membrane proteins.</li></ul><div class="box"><b>Think:</b> why would a pancreatic cell that secretes insulin have lots of rough ER?</div></section>
+<section class="slide"><h2>The endomembrane system</h2><p class="ar">النظام الغشائي الداخلي</p><ul><li><b>Rough ER</b>: protein synthesis and folding; <b>Smooth ER</b>: lipid synthesis, detoxification (liver), Ca²⁺ storage (muscle).</li><li><b>Golgi apparatus</b>: modifies, sorts and ships proteins (adds mannose-6-phosphate tags to lysosomal enzymes).</li><li><b>Lysosomes</b>: acidic digestive compartments (phagocytosis, autophagy).</li><li><b>Vacuoles</b>: storage; the central vacuole of plant cells keeps cells turgid.</li></ul><div class="box"><b>Clinical link:</b> Tay-Sachs disease — a missing lysosomal enzyme lets lipids build up in neurons.</div></section>
+<section class="slide"><h2>Energy organelles &amp; peroxisomes</h2><ul><li><b>Mitochondria</b>: cellular respiration → ATP; own DNA and ribosomes; very abundant in muscle and heart cells.</li><li><b>Chloroplasts</b> (plants): photosynthesis.</li><li><b>Peroxisomes</b>: oxidise fatty acids and detoxify; make H₂O₂ and break it down with catalase.</li></ul><div class="box"><b>Endosymbiont theory:</b> mitochondria and chloroplasts descend from engulfed prokaryotes.</div></section>
+<section class="slide"><h2>Cytoskeleton &amp; cell surfaces</h2><table><tr><th>Fibre</th><th>Main roles</th></tr><tr><td>Microtubules</td><td>Shape, organelle transport, spindle, cilia &amp; flagella</td></tr><tr><td>Microfilaments (actin)</td><td>Cell shape, muscle contraction, cytokinesis</td></tr><tr><td>Intermediate filaments</td><td>Mechanical strength (e.g., keratin)</td></tr></table><ul style="margin-top:12px"><li>Extracellular matrix (collagen, fibronectin, integrins)</li><li>Junctions: tight junctions, desmosomes, gap junctions</li></ul></section>
+<section class="slide"><h2>Check your understanding</h2><div class="box q"><b>Q1.</b> What would happen to a cell if its lysosomes stopped working?</div><div class="box q"><b>Q2.</b> Why do muscle cells contain more mitochondria than skin cells?</div><div class="box q"><b>Q3.</b> Name one structural difference between a bacterium and a human cell that a drug could target.</div><div class="box"><b>Next:</b> explore the Interactive Cell Explorer, then play Cell Organelle Detective.</div></section></main>
+<nav><button onclick="go(-1)">◀ Prev</button><span class="counter" id="ctr"></span><button onclick="go(1)">Next ▶</button></nav>
+<footer>AI-generated teaching resource (drafted with an AI assistant, reviewed by the instructor) · Use ← / → keys to navigate</footer>
+<script>
+const s=[...document.querySelectorAll('.slide')];let i=0;
+function show(){s.forEach((e,k)=>e.classList.toggle('active',k===i));document.getElementById('ctr').textContent=(i+1)+' / '+s.length;document.getElementById('fill').style.width=((i+1)/s.length*100)+'%'}
+function go(d){i=Math.max(0,Math.min(s.length-1,i+d));show()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});show();
+</script></body></html>

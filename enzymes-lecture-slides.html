@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metabolism & Enzymes — Lecture Slides</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0b1d33,#16324f);color:#eef3f8;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{width:100%;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:#9fc3e6}
+.deck{max-width:900px;width:94%;flex:1;display:flex;align-items:center}
+.slide{display:none;width:100%;background:#102a45;border:1px solid #2c5582;border-radius:18px;padding:34px 38px;min-height:420px;animation:fade .35s}
+.slide.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-size:2rem;margin-bottom:10px;background:linear-gradient(90deg,#5ee7df,#b490ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:1.45rem;color:#5ee7df;margin-bottom:16px}
+.ar{direction:rtl;color:#b9cbe0;font-size:1rem;margin-bottom:14px}
+ul{margin-left:22px;line-height:1.7;font-size:1.05rem}
+li{margin-bottom:6px}
+.box{margin-top:16px;padding:14px 16px;border-radius:10px;background:#0b2036;border-left:4px solid #ffd166;line-height:1.55}
+.box b{color:#ffd166}
+.q{border-left-color:#ef476f}.q b{color:#ef476f}
+table{border-collapse:collapse;width:100%;margin-top:6px}
+th,td{border:1px solid #2c5582;padding:8px 10px;text-align:left;font-size:.95rem}
+th{background:#173b61;color:#5ee7df}
+nav{display:flex;gap:12px;align-items:center;margin:18px 0 26px}
+button{background:#1d4a77;border:1px solid #3a76b0;color:#fff;padding:10px 20px;border-radius:10px;cursor:pointer;font-size:.95rem}
+button:hover{background:#2a5f96}
+.counter{color:#9fc3e6;min-width:70px;text-align:center}
+.bar{width:100%;height:5px;background:#0b1d33}.fill{height:100%;background:linear-gradient(90deg,#5ee7df,#b490ca);transition:width .3s}
+footer{font-size:.75rem;color:#7d9cbc;padding-bottom:14px;text-align:center}
+</style></head><body>
+<div class="bar"><div class="fill" id="fill"></div></div>
+<header><span>General Biology for Health Sciences</span><span>Enzymes · Lecture</span></header>
+<main class="deck"><section class="slide"><h1>Introduction to Metabolism &amp; Enzymes</h1><p class="ar">مقدمة في الأيض والإنزيمات</p><ul><li>What metabolism is and why cells need catalysts</li><li>Activation energy and how enzymes lower it</li><li>Active site, substrate specificity and induced fit</li><li>Factors that change enzyme activity</li><li>Enzymes in the kitchen and in medicine</li></ul><div class="box"><b>Session goal:</b> explain how enzyme structure determines substrate specificity and catalytic activity, and relate enzyme properties to cooking, baking and medicine.</div></section>
+<section class="slide"><h2>Metabolism in one slide</h2><p class="ar">الأيض: مجموع التفاعلات الكيميائية في الخلية</p><ul><li><b>Metabolism</b> = all chemical reactions in an organism.</li><li><b>Catabolic</b> pathways break molecules down and release energy (e.g., cellular respiration).</li><li><b>Anabolic</b> pathways build complex molecules and consume energy (e.g., protein synthesis).</li><li>Almost every step is catalysed by a specific enzyme.</li></ul><div class="box"><b>Key idea:</b> without enzymes, most reactions in the body would be far too slow to sustain life.</div></section>
+<section class="slide"><h2>Activation energy (E<sub>A</sub>)</h2><p class="ar">طاقة التنشيط</p><ul><li>Reactants must absorb energy to reach the unstable <b>transition state</b>.</li><li>Enzymes <b>lower E<sub>A</sub></b>, so more molecules react per second.</li><li>Enzymes do <b>not</b> change ΔG: they cannot make an unfavourable reaction favourable.</li><li>Enzymes are not consumed and can be reused many times.</li></ul><div class="box"><b>Analogy:</b> an enzyme is a tunnel through a mountain — the start and end points stay the same, but the climb is much lower.</div></section>
+<section class="slide"><h2>Active site &amp; specificity</h2><p class="ar">الموقع النشط وخصوصية الإنزيم</p><ul><li>Most enzymes are proteins; their 3-D shape creates an <b>active site</b>.</li><li>The substrate binds by weak interactions (hydrogen bonds, ionic bonds).</li><li><b>Induced fit:</b> binding causes the active site to mould more tightly around the substrate.</li><li>Specificity comes from the shape and chemistry of the active site (e.g., sucrase acts on sucrose, not lactose).</li></ul><div class="box"><b>Link to Nadia’s case:</b> lactase deficiency means lactose is not hydrolysed in the small intestine → lactose intolerance.</div></section>
+<section class="slide"><h2>Catalytic cycle</h2><ul><li>1. Substrate enters the active site → enzyme–substrate complex.</li><li>2. Active site lowers E<sub>A</sub>: orients substrates, strains bonds, provides a favourable micro-environment, or briefly bonds covalently.</li><li>3. Substrate is converted to products.</li><li>4. Products are released; the active site is free for a new substrate.</li></ul><div class="box"><b>Rate:</b> increases with substrate concentration until all active sites are occupied (<b>saturation</b>).</div></section>
+<section class="slide"><h2>Factors affecting enzyme activity</h2><p class="ar">العوامل المؤثرة في نشاط الإنزيم</p><table><tr><th>Factor</th><th>Effect</th><th>Example</th></tr><tr><td>Temperature</td><td>Rate rises to an optimum, then the enzyme <b>denatures</b></td><td>Human enzymes ≈ 37 °C; blanching vegetables stops browning</td></tr><tr><td>pH</td><td>Each enzyme has an optimum pH</td><td>Pepsin ≈ pH 2; trypsin ≈ pH 8</td></tr><tr><td>Cofactors</td><td>Non-protein helpers (metal ions, coenzymes)</td><td>Zn²⁺, Mg²⁺; vitamins as coenzyme precursors</td></tr></table></section>
+<section class="slide"><h2>Enzyme inhibitors</h2><p class="ar">مثبطات الإنزيمات</p><ul><li><b>Competitive</b>: resembles the substrate and blocks the active site; overcome by more substrate (e.g., methotrexate vs dihydrofolate reductase).</li><li><b>Non-competitive</b>: binds elsewhere and changes the enzyme’s shape.</li><li><b>Irreversible</b>: covalent binding (e.g., aspirin acetylates cyclooxygenase; nerve agents inhibit acetylcholinesterase).</li><li><b>Allosteric regulation &amp; feedback inhibition</b> switch pathways on and off.</li></ul></section>
+<section class="slide"><h2>Enzymes in the kitchen</h2><p class="ar">الإنزيمات في المطبخ</p><ul><li><b>Bromelain</b> (pineapple) and <b>papain</b> (papaya) tenderise meat by hydrolysing proteins — and stop gelatin from setting.</li><li><b>Rennet (chymosin)</b> coagulates milk proteins in cheese-making.</li><li><b>Yeast enzymes</b> ferment sugars → CO₂ makes dough rise.</li><li><b>Polyphenol oxidase</b> browns cut apples; lemon juice (low pH) and heat slow it.</li><li>Over-proofing: yeast exhausts sugars and gluten weakens → dough collapses.</li></ul></section>
+<section class="slide"><h2>Check your understanding</h2><div class="box q"><b>Q1.</b> Why does fresh pineapple stop jelly from setting, but tinned pineapple does not?</div><div class="box q"><b>Q2.</b> A drug looks almost exactly like an enzyme’s substrate. Which type of inhibition is this, and how could it be overcome?</div><div class="box q"><b>Q3.</b> Why does a high fever become dangerous for enzyme function?</div><div class="box"><b>Next:</b> group discussion with the “Enzymes in the Kitchen” cards, then the Enzyme Mastery Quiz.</div></section></main>
+<nav><button onclick="go(-1)">◀ Prev</button><span class="counter" id="ctr"></span><button onclick="go(1)">Next ▶</button></nav>
+<footer>AI-generated teaching resource (drafted with an AI assistant, reviewed by the instructor) · Use ← / → keys to navigate</footer>
+<script>
+const s=[...document.querySelectorAll('.slide')];let i=0;
+function show(){s.forEach((e,k)=>e.classList.toggle('active',k===i));document.getElementById('ctr').textContent=(i+1)+' / '+s.length;document.getElementById('fill').style.width=((i+1)/s.length*100)+'%'}
+function go(d){i=Math.max(0,Math.min(s.length-1,i+d));show()}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});show();
+</script></body></html>
